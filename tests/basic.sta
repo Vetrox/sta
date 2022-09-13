@@ -1,4 +1,4 @@
-(fn (x y z) (r1 r2 r3) 
-    (pre (fn (x y z) (> x y))) 
+(fn (x y z) (r1 r2 r3)
+    (pre (fn (x y z) (> x y)))
     (post (fn (r1 r2 r3) (> r1 4)))
-    (ret (61 45 1)))
+    (61 45 1))
