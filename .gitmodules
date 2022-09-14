@@ -4,3 +4,5 @@
 [submodule "src/numutils"]
 	path = src/numutils
 	url = https://github.com/Vetrox/numutils.git
+[submodule "numutils"]
+	url = git@github.com:Vetrox/numutils.git
