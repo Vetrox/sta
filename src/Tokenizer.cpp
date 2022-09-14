@@ -53,7 +53,9 @@ Token get_token(std::string_view& sv) {
 [[nodiscard]] std::deque<Token> tokenize(std::string_view sv) {
     std::deque<Token> tokens;
     while (true) {
-        sv = sv.substr(sv.find_first_not_of(' ')); // FIXME: out of range error here
+        auto index = sv.find_first_not_of(' ');
+        if (index == std::string::npos) break;
+        sv = sv.substr(index);
         if (sv.size() == 0) break;
         tokens.push_back(get_token(sv));
     }

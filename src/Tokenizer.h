@@ -46,6 +46,16 @@ struct TContent {
 struct Token {
     TKind m_kind {TKind::Symbol};
     TContent m_content {};
+
+    std::string to_string() const {
+        if (m_kind < TKind::__LENGTH_KEYWORDS__)
+            return "KEY: " + tkind_to_str.at(m_kind);
+        if (m_kind == TKind::Bool)
+            return "BOO: " + std::string(m_content.b ? "true" : "false");
+        if (m_kind == TKind::Int)
+            return "INT: " + m_content.i.as_decimal();
+        return "SYM: " + m_content.symbol;
+    }
 };
 
 

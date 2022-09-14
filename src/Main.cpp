@@ -14,6 +14,9 @@ int main() {
     }
     auto tokens = tokenize(program);
 
+    for (auto const& token : tokens) {
+        std::cout << token.to_string() << std::endl;
+    }
 
     return 0;
 }
