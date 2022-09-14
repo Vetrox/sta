@@ -10,7 +10,7 @@ BigInt get_int(std::string_view& sv) {
         buf += sv.at(0);
         sv = sv.substr(1);
     }
-    return BigInt(std::move(buf));
+    return BigInt(buf);
 }
 
 Token get_primitive_token(std::string_view& sv) {
