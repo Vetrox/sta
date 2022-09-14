@@ -2,7 +2,7 @@
 
 #include <array>
 #include <deque>
-#include "Number/numutils.h"
+#include "numutils/numutils.h"
 #include <string>
 #include <string_view>
 #include <unordered_map>
@@ -38,14 +38,14 @@ static std::unordered_map<std::string, TKind> str_to_tkind {
 
 
 struct TContent {
-    std::string symbol;
-    BigInt i;
+    std::string symbol {};
+    BigInt i {};
     bool b {false};
 };
 
 struct Token {
-    TKind m_kind;
-    TContent m_content;
+    TKind m_kind {TKind::Symbol};
+    TContent m_content {};
 };
 
 

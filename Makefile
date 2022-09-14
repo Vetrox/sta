@@ -1,8 +1,8 @@
 .PHONY: all
 
-CF=-std=c++2a -O1 -g -fsanitize=address,undefined,leak -D_GLIBCXX_DEBUG -Wall -Wextra -pedantic -Wshadow -Wsign-conversion -Wconversion -Wunreachable-code -Wdisabled-optimization# -Werror
-SRCcpp=$(wildcard src/*.cpp)
-SRCh=$(wildcard src/*.h)
+CF=-std=c++2a -O0 -g -fsanitize=address,undefined,leak -D_GLIBCXX_DEBUG -Wall -Wextra -pedantic -Wshadow -Wsign-conversion -Wconversion -Wunreachable-code -Wdisabled-optimization# -Werror
+SRCcpp=$(shell find src/ -name '*.cpp')
+SRCh=$(shell find src/ -name '*.h')
 OBJS=$(SRCcpp:.cpp=.o)
 PCH=$(SRCh:.h=.h.gch) # precompiled headers .gch
 
@@ -15,10 +15,10 @@ dirs:
 	mkdir -p build
 
 clean-objs:
-	rm -f src/*.o
+	rm -f $(OBJS)
 
 clean-pch:
-	rm -f src/*.gch
+	rm -f $(PCH)
 
 clean: clean-objs clean-pch
 	rm -rf build
