@@ -1,5 +1,9 @@
-fn  (x y z)
-        (fn (x y z) (> x y))
-    (r1 r2 r3)
-        (fn (r1 r2 r3) (> r1 4))
-    (61 45 1)
+fn foo
+    in x y z
+    out r1 r2 r3
+    guard
+        > x 4
+        > r1 4
+    body x 45 1
+
+call foo 10 1 1
