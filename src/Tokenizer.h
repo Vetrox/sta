@@ -9,11 +9,12 @@
 
 
 enum TKind {
-    BracketOpen = 0,
-    BracketClose,
-    Fn,
-    Pre,
-    Post,
+    Fn = 0,
+    in,
+    out,
+    guard,
+    body,
+    call,
     Gt,
     Exclamation,
     __LENGTH_KEYWORDS__,
@@ -22,19 +23,19 @@ enum TKind {
     Symbol,
 };
 
-static std::array<std::string, 7> tkind_to_str {
-    "(", ")", "fn", "pre", "post", ">", "!"
+static std::array<std::string, 8> tkind_to_str {
+    "fn", "in", "out", "guard", "body", "call", ">", "!"
 };
 
-static std::unordered_map<std::string, TKind> str_to_tkind {
-    {"(", TKind::BracketOpen},
+/*static std::unordered_map<std::string, TKind> str_to_tkind {
+    {"(", TKind::},
     {")", TKind::BracketClose},
     {"fn", TKind::Fn},
     {"pre", TKind::Pre},
     {"post", TKind::Post},
     {">", TKind::Gt},
     {"!", TKind::Exclamation}
-};
+};*/
 
 
 struct TContent {
@@ -53,7 +54,7 @@ struct Token {
         if (m_kind == TKind::Bool)
             return "BOO: " + std::string(m_content.b ? "true" : "false");
         if (m_kind == TKind::Int)
-            return "INT: " + m_content.i.as_decimal();
+            return "NUM: " + m_content.i.as_decimal();
         return "SYM: " + m_content.symbol;
     }
 };
