@@ -6,11 +6,18 @@ BigInt get_int(std::string_view& sv) {
         buf += sv.at(0);
         sv = sv.substr(1);
     }
-    while (sv.size() > 0 && sv.at(0) > '0' && sv.at(0) <= '9') {
+    while (sv.size() > 0 && sv.at(0) >= '0' && sv.at(0) <= '9') {
         buf += sv.at(0);
         sv = sv.substr(1);
     }
     return BigInt(buf);
+}
+
+bool starts_with_keyword(std::string_view sv) {
+    for (size_t i = 0; i < TKind::__LENGTH_KEYWORDS__; i++)
+        if (sv.starts_with(tkind_to_str[i]))
+            return true;
+    return false;
 }
 
 Token get_primitive_token(std::string_view& sv) {
@@ -26,11 +33,7 @@ Token get_primitive_token(std::string_view& sv) {
         return {.m_kind = TKind::Int, .m_content = {.i = get_int(sv)}};
     }
     std::string buf;
-    while (!(sv.starts_with(" ")
-            || sv.starts_with("(")
-            || sv.starts_with(")")
-            || sv.starts_with("!")
-            || sv.starts_with(">"))) {
+    while (!sv.empty() && !sv.starts_with(" ") && !starts_with_keyword(sv)) {
         buf += sv.at(0);
         sv = sv.substr(1);
     }
