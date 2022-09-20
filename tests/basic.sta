@@ -4,6 +4,10 @@ fn foo
     guard
         > x 4
         > r1 4
-    body x 45 1
+    body
+        x 
+        45
+        1
+end
 
 call foo 10 1 1
