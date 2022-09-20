@@ -1,59 +1,58 @@
 #include "Parser.h"
 
-std::unique_ptr<Expression> parse_expression(std::span<Token>& tokens)
+#include <exception>
+#include <source_location>
+#include <stdexcept>
+
+#define A(expr)  \
+    if (!(expr)) \
+    std::throw_with_nested(std::runtime_error(__FILE__ + std::string(" Line ") + std::to_string(__LINE__) + "\n> in function: " + __PRETTY_FUNCTION__ + "\n> ASSERTION FAILED: " + #expr + " wasn't met"))
+
+std::shared_ptr<Expression> parse_expression(std::span<Token>& tokens)
 {
-    std::cout << "Parse expression is not implemented. Tokens size: " << tokens.size() << std::endl;
-    abort();
+    A(false);
 }
 
 std::shared_ptr<AbstractLanguageItem> parse_fn(std::span<Token>& tokens)
 {
-    if (tokens.empty())
-        abort();
-    if (tokens.front().m_kind != TKind::Fn)
-        abort();
+    A(!tokens.empty());
+    A(tokens.front().m_kind == TKind::Fn);
     tokens = tokens.subspan(1);
-    if (tokens.front().m_kind != TKind::Symbol)
-        abort();
+    A(tokens.front().m_kind == TKind::Symbol);
     auto const name = tokens.front().m_content.symbol;
     tokens = tokens.subspan(1);
-    if (tokens.front().m_kind != TKind::in)
-        abort();
+    A(tokens.front().m_kind == TKind::in);
     tokens = tokens.subspan(1);
     auto inputs = std::vector<std::string>();
     while (tokens.front().m_kind == TKind::Symbol) {
         inputs.push_back(tokens.front().m_content.symbol);
         tokens = tokens.subspan(1);
     }
-    if (tokens.front().m_kind != TKind::out)
-        abort();
+    A(tokens.front().m_kind == TKind::out);
     tokens = tokens.subspan(1);
     auto outputs = std::vector<std::string>();
     while (tokens.front().m_kind == TKind::Symbol) {
         outputs.push_back(tokens.front().m_content.symbol);
         tokens = tokens.subspan(1);
     }
-    if (tokens.front().m_kind != TKind::guard)
-        abort();
+    A(tokens.front().m_kind == TKind::guard);
     tokens = tokens.subspan(1);
-    auto guards = std::vector<Expression>();
+    auto guards = std::vector<std::shared_ptr<Expression>>();
     while (true) {
         if (tokens.empty())
             abort();
         if (tokens.front().m_kind == TKind::body)
             break;
-        guards.push_back(parse_expression(span));
+        guards.push_back(parse_expression(tokens));
     }
-    if (tokens.front().m_kind != TKind::body)
-        abort();
+    A(tokens.front().m_kind == TKind::body);
     tokens = tokens.subspan(1);
-    auto body = std::vector<Expression>();
+    auto body = std::vector<std::shared_ptr<Expression>>();
     while (true) {
-        if (tokens.empty())
-            abort();
+        A(!tokens.empty());
         if (tokens.front().m_kind == TKind::End)
             break;
-        body.push_back(parse_expression(span));
+        body.push_back(parse_expression(tokens));
     }
     return std::make_shared<Function>(
         std::move(name),
@@ -65,8 +64,7 @@ std::shared_ptr<AbstractLanguageItem> parse_fn(std::span<Token>& tokens)
 
 std::shared_ptr<AbstractLanguageItem> parse_next(std::span<Token>& tokens)
 {
-    if (tokens.empty())
-        abort();
+    A(!tokens.empty());
     auto const first_kind = tokens.begin()->m_kind;
     if (first_kind == TKind::Fn) {
         return parse_fn(tokens);

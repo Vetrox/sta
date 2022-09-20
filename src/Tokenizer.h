@@ -16,14 +16,15 @@ enum TKind {
     call,
     Gt,
     Exclamation,
+    End,
     __LENGTH_KEYWORDS__,
     Bool,
     Int,
     Symbol,
 };
 
-static std::array<std::string, 8> tkind_to_str {
-    "fn", "in", "out", "guard", "body", "call", ">", "!"
+static std::array<std::string, 9> tkind_to_str {
+    "fn", "in", "out", "guard", "body", "call", ">", "!", "end"
 };
 
 /*static std::unordered_map<std::string, TKind> str_to_tkind {
