@@ -4,7 +4,8 @@
 #include "Parser.h"
 #include "Tokenizer.h"
 
-int main() {
+int main()
+{
     std::cout << "Hello from main" << std::endl;
 
     std::ifstream f("tests/basic.sta");

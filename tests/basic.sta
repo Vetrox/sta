@@ -5,7 +5,7 @@ fn foo
         > x 4
         > r1 4
     body
-        x 
+        x
         45
         1
 end

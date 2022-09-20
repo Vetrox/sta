@@ -8,9 +8,36 @@
     if (!(expr)) \
     std::throw_with_nested(std::runtime_error(__FILE__ + std::string(" Line ") + std::to_string(__LINE__) + "\n> in function: " + __PRETTY_FUNCTION__ + "\n> ASSERTION FAILED: " + #expr + " wasn't met"))
 
+#define A_(expr, msg) \
+    if (!(expr))      \
+    std::throw_with_nested(std::runtime_error(__FILE__ + std::string(" Line ") + std::to_string(__LINE__) + "\n> in function: " + __PRETTY_FUNCTION__ + "\n> " + msg))
+
+std::shared_ptr<Literal> parse_literal(Token lit)
+{
+    if (lit.m_kind == TKind::Bool) {
+        return std::make_shared<BooleanLiteral>(lit.m_content.b);
+    } else if (lit.m_kind == TKind::Int) {
+        return std::make_shared<IntegerLiteral>(lit.m_content.i);
+    }
+    A_(false, "Literal type unknown: " + lit.to_string());
+}
+
 std::shared_ptr<Expression> parse_expression(std::span<Token>& tokens)
 {
-    A(false);
+    A(!tokens.empty());
+    A(tokens.front().m_kind == TKind::Gt);
+    auto op = Operator(OperatorKind::Greater);
+    tokens = tokens.subspan(1);
+    A(!tokens.empty());
+    auto lhs = tokens.front();
+    A(lhs.m_kind > TKind::__LENGTH_KEYWORDS__);
+    tokens = tokens.subspan(1);
+    A(!tokens.empty());
+    auto rhs = tokens.front();
+    A(rhs.m_kind > TKind::__LENGTH_KEYWORDS__);
+
+    return std::make_shared<BinaryOp>(op, parse_literal(lhs),
+        parse_literal(rhs));
 }
 
 std::shared_ptr<AbstractLanguageItem> parse_fn(std::span<Token>& tokens)

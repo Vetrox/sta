@@ -27,16 +27,6 @@ static std::array<std::string, 9> tkind_to_str {
     "fn", "in", "out", "guard", "body", "call", ">", "!", "end"
 };
 
-/*static std::unordered_map<std::string, TKind> str_to_tkind {
-    {"(", TKind::},
-    {")", TKind::BracketClose},
-    {"fn", TKind::Fn},
-    {"pre", TKind::Pre},
-    {"post", TKind::Post},
-    {">", TKind::Gt},
-    {"!", TKind::Exclamation}
-};*/
-
 struct TContent {
     std::string symbol {};
     BigInt i {};
