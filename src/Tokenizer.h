@@ -1,12 +1,11 @@
 #pragma once
 
-#include <array>
-#include <deque>
 #include "numutils/numutils.h"
+#include <array>
 #include <string>
 #include <string_view>
 #include <unordered_map>
-
+#include <vector>
 
 enum TKind {
     Fn = 0,
@@ -37,18 +36,18 @@ static std::array<std::string, 8> tkind_to_str {
     {"!", TKind::Exclamation}
 };*/
 
-
 struct TContent {
     std::string symbol {};
     BigInt i {};
-    bool b {false};
+    bool b { false };
 };
 
 struct Token {
-    TKind m_kind {TKind::Symbol};
+    TKind m_kind { TKind::Symbol };
     TContent m_content {};
 
-    std::string to_string() const {
+    std::string to_string() const
+    {
         if (m_kind < TKind::__LENGTH_KEYWORDS__)
             return "KEY: " + tkind_to_str.at(m_kind);
         if (m_kind == TKind::Bool)
@@ -59,6 +58,4 @@ struct Token {
     }
 };
 
-
-[[nodiscard]] std::deque<Token> tokenize(std::string_view);
-
+[[nodiscard]] std::vector<Token> tokenize(std::string_view);

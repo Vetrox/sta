@@ -1,6 +1,7 @@
 #include <fstream>
 #include <iostream>
 
+#include "Parser.h"
 #include "Tokenizer.h"
 
 int main() {
@@ -17,6 +18,11 @@ int main() {
     for (auto const& token : tokens) {
         std::cout << token.to_string() << std::endl;
     }
+
+    auto parsed = parse(tokens);
+
+    for (auto const& item : parsed)
+        std::cout << item->to_string() << std::endl;
 
     return 0;
 }
