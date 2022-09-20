@@ -1,5 +1,10 @@
 #include "Tokenizer.h"
 
+bool is_intrinsic(TKind kind)
+{
+    return kind == TKind::Gt; // TODO: add !
+}
+
 BigInt get_int(std::string_view& sv)
 {
     std::string buf;

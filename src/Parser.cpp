@@ -25,19 +25,22 @@ std::shared_ptr<Literal> parse_literal(Token lit)
 std::shared_ptr<Expression> parse_expression(std::span<Token>& tokens)
 {
     A(!tokens.empty());
-    A(tokens.front().m_kind == TKind::Gt);
+    if (!is_intrinsic(tokens.front().m_kind)) {
+        auto obj = tokens.front();
+        tokens = tokens.subspan(1);
+        if (obj.m_kind == TKind::Symbol)
+            return std::make_shared<Variable>(obj.m_content.symbol);
+        if (obj.m_kind > TKind::__LENGTH_KEYWORDS__)
+            return parse_literal(obj);
+        A_(false, "parsing non-intrinsic of following type not implemented: " + tokens.front().to_string());
+    }
+    A_(tokens.front().m_kind == TKind::Gt, "Not > " + tokens.front().to_string());
     auto op = Operator(OperatorKind::Greater);
     tokens = tokens.subspan(1);
-    A(!tokens.empty());
-    auto lhs = tokens.front();
-    A(lhs.m_kind > TKind::__LENGTH_KEYWORDS__);
-    tokens = tokens.subspan(1);
-    A(!tokens.empty());
-    auto rhs = tokens.front();
-    A(rhs.m_kind > TKind::__LENGTH_KEYWORDS__);
+    auto lhs = parse_expression(tokens);
+    auto rhs = parse_expression(tokens);
 
-    return std::make_shared<BinaryOp>(op, parse_literal(lhs),
-        parse_literal(rhs));
+    return std::make_shared<BinaryOp>(op, lhs, rhs);
 }
 
 std::shared_ptr<AbstractLanguageItem> parse_fn(std::span<Token>& tokens)
@@ -77,8 +80,10 @@ std::shared_ptr<AbstractLanguageItem> parse_fn(std::span<Token>& tokens)
     auto body = std::vector<std::shared_ptr<Expression>>();
     while (true) {
         A(!tokens.empty());
-        if (tokens.front().m_kind == TKind::End)
+        if (tokens.front().m_kind == TKind::End) {
+            tokens = tokens.subspan(1);
             break;
+        }
         body.push_back(parse_expression(tokens));
     }
     return std::make_shared<Function>(

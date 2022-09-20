@@ -23,6 +23,8 @@ enum TKind {
     Symbol,
 };
 
+bool is_intrinsic(TKind);
+
 static std::array<std::string, 9> tkind_to_str {
     "fn", "in", "out", "guard", "body", "call", ">", "!", "end"
 };
